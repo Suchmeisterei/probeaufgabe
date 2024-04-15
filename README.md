@@ -1,1 +1,1 @@
-# Probeaufgabe für Mitar
+# Probeaufgabe für Mitarbeiter
