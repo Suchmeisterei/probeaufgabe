@@ -1,1 +1,12 @@
-
+[
+  {"user": "alme", "username": "AlexMeier", "tw_id": "414617", "per_id": "89036594"},
+  {"user": "bosc", "username": "BobSchulz", "tw_id": "352706", "per_id": "90494193"},
+  {"user": "clne", "username": "ClaraNeumann", "tw_id": "991096", "per_id": "61363169"},
+  {"user": "dekr", "username": "DennisKrause", "tw_id": "137848", "per_id": "92240254"},
+  {"user": "evwe", "username": "EvaWeber", "tw_id": "541680", "per_id": "32868551"},
+  {"user": "frhu", "username": "FranzHuber", "tw_id": "248620", "per_id": "57070987"},
+  {"user": "grth", "username": "GretaThiel", "tw_id": "360095", "per_id": "31011070"},
+  {"user": "habe", "username": "HansBecker", "tw_id": "913453", "per_id": "64279678"},
+  {"user": "irfi", "username": "IrinaFischer", "tw_id": "379460", "per_id": "17088772"},
+  {"user": "jawo", "username": "JakobWolff", "tw_id": "222896", "per_id": "76749637"}
+]
