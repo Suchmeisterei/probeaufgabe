@@ -1,5 +1,4 @@
 import fs from "fs/promises";
-import log from "./log.js";
 
 export async function getTWUserIDFromPersonioID(per_id) {
     try {
@@ -46,112 +45,6 @@ export async function getPersonioIDFromTWID(tw_id) {
     return per_id = await idMapping(tw_id, "tw_id", "per_id")
 }
 
-export async function correctCommaSeparatedIntegers(str) {
-  if (typeof str !== 'string') {
-    return false; // Nicht verarbeiten, wenn es kein String ist
-  }
-  // Entfernen aller Leerzeichen aus dem String
-  const noSpaces = str.replace(/\s+/g, '');
-  // Zerlegen des bereinigten Strings in ein Array von Substrings
-  const substrings = noSpaces.split(',');
-
-  let correctedArray = [];
-
-  for (let i = 0; i < substrings.length; i++) {
-      const num = parseInt(substrings[i]);
-
-      // Überprüfen, ob der Substring eine Ganzzahl ist und dem ursprünglichen Substring entspricht
-      if (!Number.isInteger(num) || num.toString() !== substrings[i]) {
-          return false; // Nicht alle Substrings sind gültige Ganzzahlen
-      }
-
-      correctedArray.push(num.toString());
-  }
-
-  // Zusammenbauen und Rückgabe des korrigierten Strings
-  return correctedArray.join(',');
-}
-
-
-
-/* 
-Wandelt Produkttyp eines Hubspot Produkts/LineItems in einen Tag für Teamwork Projekte um.
-*/
-export async function productToTag(type){
-  try {
-    const data = await fs.readFile("./tag_lookup.json", "utf8");
-    const tags = JSON.parse(data);
-    const tag = tags.find(
-      (tag) => tag.hs_product_type == type
-    );
-    return tag ? Number(tag.tw_tag_id) : '';
-  } catch (error) {
-    log.error("[teamwork] [productToTag] Fehler beim Lesen der Datei:", error);
-    return '';
-  }
-}
-
-/*
-Funktion zum Schreiben von Daten in eine JSON Datei
-*/
-export async function saveDataToFile(data, filename) {
-    // Konvertiere das JavaScript-Objekt in einen String im JSON-Format
-    const jsonData = JSON.stringify(data, null, 2);
-  
-    // Schreibe die Daten in eine Datei
-    fs.writeFile(filename, jsonData, "utf8", function (err) {
-      if (err) {
-        log.error("Ein Fehler ist beim Schreiben der Datei aufgetreten:", err);
-      } else {
-        log.success("Daten wurden erfolgreich in " + filename + " gespeichert.");
-      }
-    });
-  }
-
-/*
- Bsp: 69999.88976 => 69.999,89
-*/
- export async function formatiereZahl(zahl) {
-  // Runde die Zahl auf zwei Nachkommastellen
-  const gerundeteZahl = Math.round(zahl * 100) / 100;
-
-  // Konvertiere die Zahl in einen String und teile sie in Vorkommastellen und Nachkommastellen auf
-  const [vorkommastellen, nachkommastellen] = gerundeteZahl.toFixed(2).split('.');
-
-  // Füge Punkte für Tausendertrennung vor den Vorkommastellen ein
-  const formatierteVorkommastellen = vorkommastellen.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-
-  // Setze ein Komma vor die Nachkommastellen
-  const formatierteNachkommastellen = `,${nachkommastellen}`;
-
-  // Kombiniere Vorkommastellen und Nachkommastellen zu einem formatierten String
-  const formatierterString = `${formatierteVorkommastellen}${formatierteNachkommastellen}`;
-
-  return formatierterString;
-}
-
-export function delay(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-export async function getLastNMonths(n) {
-  const monate = [
-    "Januar", "Februar", "März", "April", "Mai", "Juni",
-    "Juli", "August", "September", "Oktober", "November", "Dezember"
-  ];
-  let ergebnisArray = [];
-  let heute = new Date();
-
-  for (let i = 0; i < n; i++) {
-    // Berechne das neue Datum, indem du Monate subtrahierst
-    let datum = new Date(heute.getFullYear(), heute.getMonth() - i, 1);
-    // Füge den formatierten String zum Ergebnis-Array hinzu
-    ergebnisArray.push(`${monate[datum.getMonth()]} ${datum.getFullYear()}`);
-  }
-
-  // Da wir rückwärts gehen, kehre das Array um, um die Reihenfolge zu korrigieren
-  return ergebnisArray;
-}
 
 export async function isValidID(totest, allowedlength) {
   // Prüfen, ob der Wert eine Zahl ist und die angegebene Länge hat,
@@ -162,23 +55,6 @@ export async function isValidID(totest, allowedlength) {
   return numericalTest || stringTest;
 }
 
-export async function newANumbers (x_toadd){
-  if(!(x_toadd>0)) return;
-  const data = await fs.readFile("../anumbers.json", "utf8");
-  const anumbers = JSON.parse(data);
-  var newnumbers = [];
-  
-  anumbers.sort();
-  var lastnumber = anumbers[anumbers.length-1];
-  for (let i=0; i< x_toadd; i++) {
-    anumbers.push(parseInt(lastnumber)+i+1);
-    newnumbers.push('A'+parseInt(lastnumber+i+1));
-  }
-  await fs.writeFile('../anumbers.json', JSON.stringify(anumbers), function (err) {
-          if (err) return log(err.message)});
-  return newnumbers;
-  
-}
 
 
 export function splitArray(arr, chunkSize) {
@@ -246,6 +122,3 @@ log.info = createColoredLogFunction(colors.blue);
 log.warning = createColoredLogFunction(colors.yellow);
 
 export default log;
-
-
-
